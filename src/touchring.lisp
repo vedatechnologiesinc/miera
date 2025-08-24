@@ -68,8 +68,7 @@
 (def touchring-map (&rest args)
   "Bind a button using xsetwacom."
   (let ((name (touchring-pad-name)))
-    (inferior-shell:run/i `("xsetwacom" "set" ,name ,@args))
-    (success)))
+    (inferior-shell:run/i `("xsetwacom" "set" ,name ,@args))))
 
 (def touchring-bind (&optional (key *touchring-selector-key*))
   "Bind the middle selector key to the default value."
@@ -89,7 +88,6 @@
 (def touchring-set (&optional mode)
   "Change the behavior of the ring depending on the current LED value."
   (when mode (touchring-mode mode))
-  (apply #'touchring-actions (touchring-config-value (touchring-status)))
-  (success))
+  (apply #'touchring-actions (touchring-config-value (touchring-status))))
 
 (register-commands :miera/src/touchring)

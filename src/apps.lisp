@@ -112,14 +112,12 @@
 (defcommand rz@ (&rest args)
   (apply-args-1
    'rz args
-   :options '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"))
-  (success))
+   :options '("-e" "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null")))
 
 (defcommand rz! (&rest args)
   (apply-args-1
    'rz args
-   :options '("--no-p" "--no-o" "--no-g" "--no-t" "--no-D"))
-  (success))
+   :options '("--no-p" "--no-o" "--no-g" "--no-t" "--no-D")))
 
 (defcommand screenshot (mode)
   "Take a screenshot, of course."
@@ -133,46 +131,38 @@
         ((ppcre "(full)") (scrot file dest))
         ((ppcre "(region)") (scrot file dest '-s))
         (_ (err (fmt "invalid mode ~A~%" mode))))
-      (run `("xclip" "-selection" "clipboard" "-t" "image/png" ,image))
-      (success))))
+      (run `("xclip" "-selection" "clipboard" "-t" "image/png" ,image)))))
 
 (defcommand xmsg (&rest args)
   (run/i `("xmessage"
            "-fn" "-*-speedy-*-*-*-*-12-*-*-*-*-*-*-*"
            "-fg" "white" "-bg" "black"
            "-timeout" "5" "-buttons" ""
-           ,@args))
-  (success))
+           ,@args)))
 
 (defcommand xrun (&rest args)
-  (run/i `("gmrun" "-geometry" "+0+0" ,@args))
-  (success))
+  (run/i `("gmrun" "-geometry" "+0+0" ,@args)))
 
 (defcommand xm (&rest args)
   (run/i `("xmonad" "--recompile"))
-  (run/i `("xmonad" "--restart"))
-  (success))
+  (run/i `("xmonad" "--restart")))
 
 (defcommand ds4 (&rest args)
   (run `("sudo" "pkill" "-9" "ds4drv") :output :interactive :on-error nil)
   (run `("sudo" "rm" "-f" "/tmp/ds4drv.pid") :output :interactive :on-error nil)
-  (run/i `("sudo" "ds4drv" "--config" ,(expand-pathname "~/.config/ds4drv.conf")))
-  (success))
+  (run/i `("sudo" "ds4drv" "--config" ,(expand-pathname "~/.config/ds4drv.conf"))))
 
 (defun run-with-chroot (program args)
   "Run PROGRAM with ARGS inside the chroot."
-  (run/i `("zsh" "-c" ,(cat "cr " (namestring program)) ,args))
-  (success))
+  (run/i `("zsh" "-c" ,(cat "cr " (namestring program)) ,args)))
 
 (defcommand kb (&rest args)
   (setf (uiop:getenv "NIX_SKIP_KEYBASE_CHECKS") "1")
-  (run/i `("keybase-gui" ,@args))
-  (success))
+  (run/i `("keybase-gui" ,@args)))
 
 (defcommand steam! (&rest args)
   (setf (uiop:getenv "NIX_PATH") "nixpkgs=https://github.com/nixos/nixpkgs/archive/refs/heads/release-20.09.tar.gz")
-  (run/i `("nix-shell" "-p" "steam" "--run" "steam"))
-  (success))
+  (run/i `("nix-shell" "-p" "steam" "--run" "steam")) )
 
 (defcommand edraw (&rest args)
   (run-with-chroot "edrawmax" args))

@@ -28,8 +28,7 @@
   (let ((state (ecase on
                  ((:toggle) (not (enabledp id)))
                  ((nil t) on))))
-    (run `(xinput ,(if state 'enable 'disable) ,id)))
-  (success))
+    (run `(xinput ,(if state 'enable 'disable) ,id))))
 
 (def disable (&optional (id (get-id)))
   (toggle id nil))

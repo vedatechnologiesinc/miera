@@ -29,14 +29,13 @@
 (defun xdev (name type command &rest args)
   (let ((id (xdev-id name type)))
     (when (not (string= id "NIL"))
-      (run/i `(xinput ,command ,(parse-integer id) ,@args))
-      (success))))
+      (run/i `(xinput ,command ,(parse-integer id) ,@args)))))
 
 (defun xmap (&optional keymap)
   (run/i `("setxkbmap" "us"))
   (run/i `("xset" "r" "rate" "250"))
   ;; (run/i `("xmodmap" ,(home (fmt "hejmo/ktp/xmodmap/~A.xmap" keymap))))
-  (success))
+  )
 
 (defun device-header (device)
   "Return the header of DEVICE."
@@ -65,8 +64,7 @@
     (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation" 1))
     (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Button" 2))
     (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Timeout" 200))
-    (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Axes" 6 7 4 5))
-    (success)))
+    (run/i `("xinput" "set-prop" ,device "Evdev Wheel Emulation Axes" 6 7 4 5))))
 
 (defun load-keymap (&optional (device "Kinesis Advantage PRO MPC/USB Keyboard"))
   ;; (if (remove-if (complement (lambda (line) (search device line)))
@@ -75,8 +73,7 @@
   ;;     (if (string-equal (uiop:hostname) "la-vulpo")
   ;;         (xmap "tpad.us")
   ;;         (xmap "aliaj.us")))
-  (xmap)
-  (success))
+  (xmap))
 
 (defun load-xset ()
   (run/i `("xset" "-dpms"))
@@ -100,8 +97,7 @@
        :output :interactive
        :input :interactive
        :error-output nil
-       :on-error nil)
-  (success))
+       :on-error nil))
 
 (defun load-hostname ()
   (let ((hostname (uiop:hostname))
@@ -129,8 +125,7 @@
                     *colon-mode* *char-mode*
                     (char-display-char i)
                     *normal-mode*
-                    (zerop (mod (1+ i) 16))))
-  (success))
+                    (zerop (mod (1+ i) 16)))))
 
 (def ascii-oct-table ()
   (loop :for i :from 32 :to 255
@@ -139,12 +134,10 @@
                     *char-mode*
                     (char-display-char i)
                     *normal-mode*
-                    (zerop (mod (1+ i) 16))))
-  (success))
+                    (zerop (mod (1+ i) 16)))))
 
 (def rot13 (&rest args)
-  (run/i `(tr "[a-zA-Z]" "[n-za-mN-ZA-M]" ,@args))
-  (success))
+  (run/i `(tr "[a-zA-Z]" "[n-za-mN-ZA-M]" ,@args)))
 
 (def battery ()
   (format t "~A" (battery-status))
@@ -156,18 +149,15 @@
   (load-resources)
   ;;(load-touchring)
   (load-hostname)
-  (load-pointer)
-  (success))
+  (load-pointer))
 
 (def pg (&rest args)
-  (run/i `(pgrep "--list-full" "--list-name" "--full" "--ignore-case" ,@args))
-  (success))
+  (run/i `(pgrep "--list-full" "--list-name" "--full" "--ignore-case" ,@args)))
 
 (def pk (&rest args)
   (let ((numbers (mapcar #'string-first (pgrep-lines (last args)))))
     (loop :for number :in numbers
-          :do (run/i `(kill ,@(butlast args) ,number))))
-  (success))
+          :do (run/i `(kill ,@(butlast args) ,number)))))
 
 (def pk! (&rest args)
   (apply-args-1 'pk args :options '("-9")))
