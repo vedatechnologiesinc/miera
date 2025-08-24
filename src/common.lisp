@@ -54,8 +54,7 @@
 (def run-with-locale (locale &rest args)
   "Run args with locale set to LOCALE."
   (setf (uiop:getenv "LANG") locale)
-  (run/i `(,@(first args)))
-  (success))
+  (run/i `(,@(first args))))
 
 (def run-with-locale-en (args)
   "Run args with locale set to "
@@ -64,21 +63,18 @@
 (def run-with-nix-system (binary &rest args)
   "Run binary without user paths."
   (setf (uiop:getenv "PATH") "/var/setuid-wrappers:/run/wrappers/bin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin")
-  (run/i `(,binary ,@args))
-  (success))
+  (run/i `(,binary ,@args)))
 
 (def run-with-xdg (binary &rest args)
   "Run binary under a custom XDG_DATA_DIRS path."
   (setf (uiop:getenv "XDG_DATA_DIRS")
         (uiop:native-namestring (home ".local/share/mime")))
-  (run/i `(,binary ,@args))
-  (success))
+  (run/i `(,binary ,@args)))
 
 (def run-with-wine (location)
   "Run LOCATION using Wine."
   (setf (uiop:getenv "WINEDEBUG") "-all")
-  (run/i `("wine" ,location))
-  (success))
+  (run/i `("wine" ,location)))
 
 (def run-with-wine-program-files (path)
   "Run PATH under Program Files using Wine."
@@ -87,8 +83,7 @@
 (def run-with-libgl-always-software (binary &rest args)
   "Run BINARY using some LIBGL flags"
   (setf (uiop:getenv "LIBGL_ALWAYS_SOFTWARE") "1")
-  (run/i `(,binary ,@args))
-  (success))
+  (run/i `(,binary ,@args)))
 
 (defm defcommand (name args &rest body)
   "Define a function with SIGINT handler."
@@ -111,8 +106,7 @@
   "Run binary under a separate profile."
   (let ((bin (home (fmt ".nix/profiles/~A/bin" profile))))
     (setf (uiop:getenv "PATH") (unix-namestring bin))
-    (run/i `(,binary ,@args))
-    (success)))
+    (run/i `(,binary ,@args))))
 
 (def with-qt (command args)
   "Run a program in the QT profile."
@@ -135,8 +129,7 @@
              "-v" "/tmp/.X11-unix:/tmp/.X11-unix" "--device=/dev/dri:/dev/dri"
              "--memory" "1024m" "--cpus" ".5"
              ,@docker-args ,name ,@program-args))
-    (run/i `("xhost" ,(cat "-" permissions))))
-  (success))
+    (run/i `("xhost" ,(cat "-" permissions)))))
 
 (defm rc^% (&rest args)
   "Define a normal command runner."
@@ -147,8 +140,7 @@
                         `(defcommand ,name (&rest args)
                            (run (append (cl-ppcre:split "\\s+" ,command) args)
                                 :output :interactive :input :interactive
-                                :error-output t :on-error nil)
-                           (success))))))
+                                :error-output t :on-error nil))))))
 
 (defm rc-gtk2 (&rest args)
   "Define a runner with the QT_QPA environment set to gtk2."
@@ -160,8 +152,7 @@
                            (setf (uiop:getenv "QT_QPA_PLATFORMTHEME") "gtk2")
                            (run (append (cl-ppcre:split "\\s+" ,command) args)
                                 :output :interactive :input :interactive
-                                :error-output t :on-error nil)
-                           (success))))))
+                                :error-output t :on-error nil))))))
 
 (defm rc-qt5ct (&rest args)
   "Define a runner with the QT_QPA environment set to qt5ct."
@@ -173,8 +164,7 @@
                            (setf (uiop:getenv "QT_QPA_PLATFORMTHEME") "qt5ct")
                            (run (append (cl-ppcre:split "\\s+" ,command) args)
                                 :output :interactive :input :interactive
-                                :error-output t :on-error nil)
-                           (success))))))
+                                :error-output t :on-error nil))))))
 
 (defm rc-noqt (&rest args)
   "Define a runner without the QT_QPA environment."
@@ -187,8 +177,7 @@
                            (setf (uiop:getenv "QT_STYLE_OVERRIDE") "")
                            (run (append (cl-ppcre:split "\\s+" ,command) args)
                                 :output :interactive :input :interactive
-                                :error-output t :on-error nil)
-                           (success))))))
+                                :error-output t :on-error nil))))))
 
 (defm rc-wine (&rest args)
   "Define a command with wine."

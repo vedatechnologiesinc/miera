@@ -15,11 +15,10 @@
          (destination (uiop:truenamize directory)))
     (uiop:with-current-directory (destination)
       (dolist (i (all-entry-names))
-        (run `(ln -sf ,src ,i)))))
-  (success))
+        (run `(ln -sf ,src ,i))))
+    (success)))
 
 (def help ()
-  (format t "~A commands: ~{~A~^ ~}~%" (get-name) (all-entry-names))
-  (success))
+  (format t "~A commands: ~{~A~^ ~}~%" (get-name) (all-entry-names)))
 
 (register-commands :miera/src/ext)

@@ -26,11 +26,9 @@
 (% l1 "l -1")
 
 (def lv (&rest args)
-  (run/i `(pipe (l ,@args) (less)))
-  (success))
+  (run/i `(pipe (l ,@args) (less))))
 
 (def sush (&rest args)
-  (run/i `(sudo "sh" "-c" ,(fmt "~{~A~^ ~}" args)))
-  (success))
+  (run/i `(sudo "sh" "-c" ,(fmt "~{~A~^ ~}" args))))
 
 (register-commands :miera/src/unix)
