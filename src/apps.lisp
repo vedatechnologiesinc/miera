@@ -192,6 +192,11 @@
   (let ((str "https://la-lojban.github.io/sutysisku/lojban/index.html#seskari=cnano&sisku=~A&bangu=en&versio=masno"))
     (mapcar #'qb (mapcar (lambda (word) (fmt str word)) args))))
 
+(defcommand vortaro (&rest args)
+  "Open Tuja Vortaro in Qutebrowser."
+  (let ((str "https://www.tujavortaro.net/index.html?lingvo=en&vorto=~A"))
+    (mapcar #'qb (mapcar (lambda (word) (fmt str word)) args))))
+
 (defcommand clhs (&rest args)
   "Open the Hyperspec in Qutebrowser."
   (let ((str "https://www.xach.com/clhs?q=~A"))
