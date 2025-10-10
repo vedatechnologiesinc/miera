@@ -175,7 +175,10 @@
 (defcommand p (&rest args)
   "run the media player."
   (flet ((cmd (args)
-           (run/i `("mpv" "--mute" ,@args))))
+           (uiop:os-cond ((uiop:os-macosx-p)
+                          "iina")
+                         (t "mpv"))
+           (run/i `(,cmd "--mute" ,@args))))
     (if (neg args)
         (cmd '("."))
         (cmd args))))
@@ -186,6 +189,20 @@
                              "/Applications/qutebrowser.app/Contents/MacOS/qutebrowser")
                             (t "qutebrowser"))))
     (run/i `(,path ,@args))))
+
+(defcommand sf (&rest args)
+  "Open Safari."
+  (let ((path (uiop:os-cond ((uiop:os-macosx-p)
+                             "/Applications/Safari.app/Contents/MacOS/Safari")
+                            (t "safari"))))
+    (run/i `(,path ,@args))))
+
+(defcommand pdf (&rest args)
+  "Convert input to PDF using LibreOffice"
+  (let ((soffice (uiop:os-cond ((uiop:os-macosx-p)
+                                "/Applications/LibreOffice.app/Contents/MacOS/soffice")
+                               (t "libreoffice"))))
+    (run/i `(,soffice "--headless" "--convert-to" "pdf" "--outdir" "." ,@args))))
 
 (defcommand sisku (&rest args)
   "Open la lidysisku in Qutebrowser."
