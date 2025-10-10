@@ -1,8 +1,8 @@
-NAME=miera
-DEST=$(HOME)/bin
-BINARY=$(DEST)/$(NAME)
-SCRIPT=$(PWD)/$(NAME)
-CL=cl-launch
+NAME = miera
+DEST = $(HOME)/bin
+BINARY = $(DEST)/$(NAME)
+SCRIPT = "$(PWD)/$(NAME)"
+CL = cl-launch
 
 .PHONY: all $(NAME) clean
 
