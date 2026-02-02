@@ -19,8 +19,8 @@
 
 (def battery-status ()
   "Display battery status."
-  (let ((base-dir "/sys/class/power_supply/*")
-        (exclude-string "/AC/"))
+  (with ((base-dir "/sys/class/power_supply/*")
+         (exclude-string "/AC/"))
     (uiop:with-output (s nil)
       (loop :for dir :in (remove-if (lambda (path)
                                       (search exclude-string (uiop:native-namestring path)))
@@ -104,7 +104,7 @@
 
 (def run-with-nix-user (profile binary args)
   "Run binary under a separate profile."
-  (let ((bin (home (fmt ".nix/profiles/~A/bin" profile))))
+  (with ((bin (home (fmt ".nix/profiles/~A/bin" profile))))
     (setf (uiop:getenv "PATH") (unix-namestring bin))
     (run/i `(,binary ,@args))))
 

@@ -11,8 +11,8 @@
 (in-package #:miera/src/ext)
 
 (def create-symlinks (src)
-  (let* ((directory (or (uiop:getenv "DEST") "~/bin"))
-         (destination (uiop:truenamize directory)))
+  (with* ((directory (or (uiop:getenv "DEST") "~/bin"))
+          (destination (uiop:truenamize directory)))
     (uiop:with-current-directory (destination)
       (dolist (i (all-entry-names))
         (run `(ln -sf ,src ,i))))

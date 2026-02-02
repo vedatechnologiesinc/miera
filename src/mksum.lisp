@@ -130,9 +130,9 @@
 
 (defun file-checksum (type file)
   "Compute the TYPE checksum of FILE."
-  (let ((buffer (make-array 8192 :element-type '(unsigned-byte 8)))
-        (digest (make-array (ironclad:digest-length type) :element-type '(unsigned-byte 8)))
-        (digester (ironclad:make-digest type)))
+  (with ((buffer (make-array 8192 :element-type '(unsigned-byte 8)))
+         (digest (make-array (ironclad:digest-length type) :element-type '(unsigned-byte 8)))
+         (digester (ironclad:make-digest type)))
     (ironclad:digest-file digester file :buffer buffer :digest digest)
     (format-two (ironclad:byte-array-to-hex-string digest) (uiop:truenamize file))))
 
@@ -146,9 +146,9 @@
 (defun directory-checksum (type directory)
   "Compute the TYPE checksum of the concatenated checksums of the files inside DIRECTORY."
   (when (uiop:directory-exists-p directory)
-    (let* ((path (uiop:truenamize directory))
-           (value (reduce (lambda (string-1 string-2) (concat string-1 string-2))
-                          (list-dir-checksum type path))))
+    (with* ((path (uiop:truenamize directory))
+            (value (reduce (lambda (string-1 string-2) (concat string-1 string-2))
+                           (list-dir-checksum type path))))
       (format-two (hash type value) path))))
 
 (defun option-without (arg)
