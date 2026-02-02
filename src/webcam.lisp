@@ -24,10 +24,10 @@
 
 (defun webcam-device (regex)
   "Return the webcam device for REGEX."
-  (let* ((devices (webcam-devices))
-         (position (position-if (lambda (entry)
-                                  (cl-ppcre:scan regex entry))
-                                devices)))
+  (with* ((devices (webcam-devices))
+          (position (position-if (lambda (entry)
+                                   (cl-ppcre:scan regex entry))
+                                 devices)))
     (when position
       (string-trim '(#\Space #\Tab #\Newline)
                    (nth (1+ position) devices)))))
@@ -46,14 +46,14 @@
 
 (defun device-id (name)
   "Return the device ID of device with NAME."
-  (let* ((files (directory *directory-wildcard*))
-         (entry (first (remove-if-not (lambda (device)
-                                        (string-equal name (uiop:read-file-line device)))
-                                      files)))
-         (strings (remove-if #'empty-string-p
-                             (cl-ppcre:split #\/
-                                             (directory-namestring
-                                              (uiop:native-namestring entry))))))
+  (with* ((files (directory *directory-wildcard*))
+          (entry (first (remove-if-not (lambda (device)
+                                         (string-equal name (uiop:read-file-line device)))
+                                       files)))
+          (strings (remove-if #'empty-string-p
+                              (cl-ppcre:split #\/
+                                              (directory-namestring
+                                               (uiop:native-namestring entry))))))
     (end strings)))
 
 (defun run-command/i (device &rest args)
@@ -64,8 +64,8 @@
 
 (defun current-zoom (&optional (device (default-device)))
   "Return the current zoom settings."
-  (let* ((output (run-command/ss device "-C" "zoom_absolute"))
-         (value (parse-integer (second (cl-ppcre:split #\space output)))))
+  (with* ((output (run-command/ss device "-C" "zoom_absolute"))
+          (value (parse-integer (second (cl-ppcre:split #\space output)))))
     value))
 
 (defun zoom-settings (&optional (device (default-device)))
@@ -110,14 +110,14 @@
 
 (defun enable-integrated-webcam ()
   "Enable the integrated webcam."
-  (let* ((id (get-integrated-camera-id))
-         (fmt (fmt "echo ~A > /sys/bus/usb/drivers/usb/bind" id)))
+  (with* ((id (get-integrated-camera-id))
+          (fmt (fmt "echo ~A > /sys/bus/usb/drivers/usb/bind" id)))
     (sush fmt)))
 
 (defun disable-integrated-webcam ()
   "Disable the integrated webcam."
-  (let* ((id (get-integrated-camera-id))
-         (fmt (fmt "echo ~A > /sys/bus/usb/drivers/usb/unbind" id)))
+  (with* ((id (get-integrated-camera-id))
+          (fmt (fmt "echo ~A > /sys/bus/usb/drivers/usb/unbind" id)))
     (sush fmt)))
 
 (defun set-zoom (device value)
@@ -132,20 +132,20 @@
 
 (defun decrease-zoom (&optional (device (default-device)))
   "Decrease the zoom setting."
-  (let* ((current (current-zoom device))
-         (new (- current +zoom-increments+))
-         (value (if (< new (get-minimum-zoom device))
-                    (get-minimum-zoom device)
-                    new)))
+  (with* ((current (current-zoom device))
+          (new (- current +zoom-increments+))
+          (value (if (< new (get-minimum-zoom device))
+                     (get-minimum-zoom device)
+                     new)))
     (set-zoom device value)))
 
 (defun increase-zoom (&optional (device (default-device)))
   "Decrease the zoom setting."
-  (let* ((current (current-zoom device))
-         (new (+ current +zoom-increments+))
-         (value (if (> new (get-maximum-zoom device))
-                    (get-maximum-zoom device)
-                    new)))
+  (with* ((current (current-zoom device))
+          (new (+ current +zoom-increments+))
+          (value (if (> new (get-maximum-zoom device))
+                     (get-maximum-zoom device)
+                     new)))
     (set-zoom device value)))
 
 (defun minimum-zoom (&optional (device (default-device)))
@@ -158,7 +158,7 @@
 
 (def webcam (fn &rest args)
   "Apply matching FN to ARGS."
-  (let ((symbol (intern (string-upcase fn) (find-package :miera/src/webcam))))
+  (with (symbol (intern (string-upcase fn) (find-package :miera/src/webcam)))
     (when (fboundp symbol)
       (apply symbol args))))
 

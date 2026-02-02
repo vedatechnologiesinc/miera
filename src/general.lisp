@@ -27,7 +27,7 @@
                           (uiop:run-program '("xinput" "list") :output :lines))) "\\1")))
 
 (defun xdev (name type command &rest args)
-  (let ((id (xdev-id name type)))
+  (with (id (xdev-id name type))
     (when (not (string= id "NIL"))
       (run/i `(xinput ,command ,(parse-integer id) ,@args)))))
 
@@ -45,7 +45,7 @@
 
 (defun trim-device-header (device)
   "Return DEVICE without the header."
-  (let ((header (device-header device)))
+  (with (header (device-header device))
     (if header
         (multiple-value-bind (start end)
             (cl-ppcre:scan (cat "^" header ":") device)
@@ -100,8 +100,8 @@
        :on-error nil))
 
 (defun load-hostname ()
-  (let ((hostname (uiop:hostname))
-        (xdev-args '("pointer" "set-button-map" "1" "2" "3" "5" "4")))
+  (with ((hostname (uiop:hostname))
+         (xdev-args '("pointer" "set-button-map" "1" "2" "3" "5" "4")))
     (match hostname
       ((ppcre "la-vulpo")
        (miera/src/touchpad:disable)
@@ -155,7 +155,7 @@
   (run/i `(pgrep "--list-full" "--list-name" "--full" "--ignore-case" ,@args)))
 
 (def pk (&rest args)
-  (let ((numbers (mapcar #'string-first (pgrep-lines (last args)))))
+  (with (numbers (mapcar #'string-first (pgrep-lines (last args))))
     (loop :for number :in numbers
           :do (run/i `(kill ,@(butlast args) ,number)))))
 

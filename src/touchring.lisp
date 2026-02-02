@@ -41,7 +41,7 @@
 
 (defun touchring-config-value (index)
   "Return the operations associated with an index."
-  (let ((config (touchring-read-config)))
+  (with (config (touchring-read-config))
     (rest (assoc index config))))
 
 (defun touchring-led-file ()
@@ -50,10 +50,10 @@
 
 (defun touchring-device-name (type)
   "Return the name of the touchring by type NAME."
-  (let* ((lines (inferior-shell:run/lines `("xsetwacom" "list" "devices")))
-         (device (concatenate 'string "type: " (string-upcase type)))
-         (line (first (remove-if-not (lambda (line) (search device line :test #'string=))
-                                     lines))))
+  (with* ((lines (inferior-shell:run/lines `("xsetwacom" "list" "devices")))
+          (device (concatenate 'string "type: " (string-upcase type)))
+          (line (first (remove-if-not (lambda (line) (search device line :test #'string=))
+                                      lines))))
     (cl-ppcre:regex-replace "(^.*Pad pad).*"  line "\\1")))
 
 (defun touchring-pad-name ()
@@ -62,22 +62,22 @@
 
 (def touchring-status ()
   "Return the current value of the LED file."
-  (let ((value (uiop:read-file-form (touchring-led-file))))
+  (with (value (uiop:read-file-form (touchring-led-file)))
     value))
 
 (def touchring-map (&rest args)
   "Bind a button using xsetwacom."
-  (let ((name (touchring-pad-name)))
+  (with (name (touchring-pad-name))
     (inferior-shell:run/i `("xsetwacom" "set" ,name ,@args))))
 
 (def touchring-bind (&optional (key *touchring-selector-key*))
   "Bind the middle selector key to the default value."
-  (let ((value (fmt "key ~A" key)))
+  (with (value (fmt "key ~A" key))
     (touchring-map "Button" "1" value)))
 
 (def touchring-mode (value)
   "Use sudo to set the value of the LED file."
-  (let ((command (fmt "echo ~A > ~A" value (touchring-led-file))))
+  (with (command (fmt "echo ~A > ~A" value (touchring-led-file)))
     (sush command)))
 
 (def touchring-actions (action-1 action-2)

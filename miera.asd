@@ -3,9 +3,10 @@
 
 (defsystem :miera
     :name "miera"
-    :version (:read-file-form #P"version.lisp")
     :description "A small collection of CLI programs"
+    :version #.(uiop:read-file-form (make-pathname :directory '(:relative "src") :name "version" :type "lisp"))
     :author "Rommel Martínez <ebzzry@icloud.com>"
+    :licence "BSD-3-Clause"
     :class :package-inferred-system
     :depends-on (#:cl-ppcre
                  #:local-time

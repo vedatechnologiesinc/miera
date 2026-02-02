@@ -7,11 +7,12 @@
         #:cl-scripting
         #:optima
         #:optima.ppcre
+        #:miera/src/ext
         #:marie))
 
 (in-package #:miera/src/touchpad)
 
-(def get-id ()
+(defun get-id ()
   (dolist (line (run/lines '(xinput list)))
     (match line
       ((ppcre "(TouchPad|\\sSYNA.*)\\s+id\=([0-9]{1,2})\\s+" _ x)
@@ -25,9 +26,9 @@
       ((ppcre "Device Enabled\\s+[():0-9]+\\s+([01])" x) (return (equal x "1"))))))
 
 (def toggle (&optional (id (get-id)) (on :toggle))
-  (let ((state (ecase on
+  (with (state (ecase on
                  ((:toggle) (not (enabledp id)))
-                 ((nil t) on))))
+                 ((nil t) on)))
     (run `(xinput ,(if state 'enable 'disable) ,id))))
 
 (def disable (&optional (id (get-id)))
@@ -41,8 +42,8 @@
     ((null argv) (toggle))
     ((eql (first-char (first argv)) #\() (eval (first argv)))
     (t (if-let (fun (package-function :miera/src/touchpad (standard-case-symbol-name (first argv))))
-               (apply 'run-command fun (rest argv))
-               (progn
-                 (format *error-output* "Bad touchpad command: ~A~%" (first argv))
-                 (help *error-output*)
-                 (quit 2))))))
+         (apply #'run-command fun (rest argv))
+         (progn
+           (format *error-output* "Bad touchpad command: ~A~%" (first argv))
+           (help *error-output*)
+           (uiop:quit 2)))))) 

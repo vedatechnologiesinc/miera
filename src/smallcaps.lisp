@@ -50,7 +50,7 @@
 (defcommand smallcaps (&optional (text (uiop:slurp-stream-line *standard-input*)))
   "Output the smallcaps version of TEXT."
   (flet ((fn (base)
-           (let ((value (cdr (assoc base *smallcaps-alist* :test #'char-equal))))
+           (with (value (cdr (assoc base *smallcaps-alist* :test #'char-equal)))
              (or value base))))
     (loop :for char :across text :do (format t "~A" (fn char)))))
 
