@@ -5,7 +5,7 @@
     :name "miera"
     :description "A small collection of CLI programs"
     :version #.(uiop:read-file-form (make-pathname :directory '(:relative "src") :name "version" :type "lisp"))
-    :author "Rommel Martínez <ebzzry@icloud.com>"
+    :author "VEDA Technologies, Inc. <hello@veda-tech.com>"
     :licence "BSD-3-Clause"
     :class :package-inferred-system
     :depends-on (#:cl-ppcre
