@@ -6,7 +6,7 @@
     :description "A small collection of CLI programs"
     :version #.(uiop:read-file-form (make-pathname :directory '(:relative "src") :name "version" :type "lisp"))
     :author "VEDA Technologies, Inc. <hello@veda-tech.com>"
-    :licence "BSD-3-Clause"
+    :licence "BSD-2-Clause"
     :class :package-inferred-system
     :depends-on (#:cl-ppcre
                  #:local-time
