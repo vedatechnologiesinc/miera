@@ -82,7 +82,7 @@
   (values
    (parse-integer
     (cl-ppcre:regex-replace
-     (fmt "~A=(.*)" type)
+     (fmt "~a=(.*)" type)
      (first (remove-if-not (lambda (text)
                              (search type text))
                            (zoom-settings device)))
@@ -111,18 +111,18 @@
 (defun enable-integrated-webcam ()
   "Enable the integrated webcam."
   (with* ((id (get-integrated-camera-id))
-          (fmt (fmt "echo ~A > /sys/bus/usb/drivers/usb/bind" id)))
+          (fmt (fmt "echo ~a > /sys/bus/usb/drivers/usb/bind" id)))
     (sush fmt)))
 
 (defun disable-integrated-webcam ()
   "Disable the integrated webcam."
   (with* ((id (get-integrated-camera-id))
-          (fmt (fmt "echo ~A > /sys/bus/usb/drivers/usb/unbind" id)))
+          (fmt (fmt "echo ~a > /sys/bus/usb/drivers/usb/unbind" id)))
     (sush fmt)))
 
 (defun set-zoom (device value)
   "Set a specific zoom value."
-  (run-command/i device "-c" (fmt "zoom_absolute=~A" value))
+  (run-command/i device "-c" (fmt "zoom_absolute=~a" value))
   (current-zoom device))
 
 (defun reset-zoom (&optional (device (default-device)))

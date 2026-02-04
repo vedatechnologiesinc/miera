@@ -28,7 +28,7 @@
             :for battery = (first (last (pathname-directory dir)))
             :for capacity = (uiop:read-file-line (uiop:subpathname dir "capacity"))
             :for status = (uiop:read-file-line (uiop:subpathname dir "status"))
-            :do (format s "~A: ~A% (~A)~%" battery capacity status)))))
+            :do (format s "~a: ~a% (~a)~%" battery capacity status)))))
 
 (def wine (path &rest args)
   "Run PATH with wine."
@@ -36,7 +36,7 @@
 
 (def err (message)
   "Exit with MESSAGE."
-  (die 1 (format t "Error: ~A~%" message)))
+  (die 1 (format t "Error: ~a~%" message)))
 
 (def apply-args (function options args)
   "Apply FUNCTION to ARGS."
@@ -78,7 +78,7 @@
 
 (def run-with-wine-program-files (path)
   "Run PATH under Program Files using Wine."
-  (run-with-wine (home (fmt ".wine/drive_c/Program Files/~A" path))))
+  (run-with-wine (home (fmt ".wine/drive_c/Program Files/~a" path))))
 
 (def run-with-libgl-always-software (binary &rest args)
   "Run BINARY using some LIBGL flags"
@@ -98,13 +98,13 @@
           #+lispworks error
           () nil)
          (error (c)
-           (format t "Oops, an unknown error occured:~&~A~&" c)))
+           (format t "Oops, an unknown error occured:~&~a~&" c)))
        (cl-scripting:success))
      (export ',name)))
 
 (def run-with-nix-user (profile binary args)
   "Run binary under a separate profile."
-  (with ((bin (home (fmt ".nix/profiles/~A/bin" profile))))
+  (with ((bin (home (fmt ".nix/profiles/~a/bin" profile))))
     (setf (uiop:getenv "PATH") (unix-namestring bin))
     (run/i `(,binary ,@args))))
 

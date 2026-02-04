@@ -72,12 +72,12 @@
 
 (def touchring-bind (&optional (key *touchring-selector-key*))
   "Bind the middle selector key to the default value."
-  (with (value (fmt "key ~A" key))
+  (with (value (fmt "key ~a" key))
     (touchring-map "Button" "1" value)))
 
 (def touchring-mode (value)
   "Use sudo to set the value of the LED file."
-  (with (command (fmt "echo ~A > ~A" value (touchring-led-file)))
+  (with (command (fmt "echo ~a > ~a" value (touchring-led-file)))
     (sush command)))
 
 (def touchring-actions (action-1 action-2)

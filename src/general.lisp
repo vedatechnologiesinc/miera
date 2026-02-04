@@ -18,12 +18,12 @@
 (defvar *normal-mode* "[0m")
 
 (defun xdev-id (name type)
-  (fmt "~A"
+  (fmt "~a"
        (cl-ppcre:regex-replace
         (cl-ppcre:create-scanner ".*id=(.*?)	+.*")
         (first (remove-if (complement
                            (lambda (line)
-                             (and (search name line) (search (fmt "slave  ~A" type) line))))
+                             (and (search name line) (search (fmt "slave  ~a" type) line))))
                           (uiop:run-program '("xinput" "list") :output :lines))) "\\1")))
 
 (defun xdev (name type command &rest args)
@@ -34,7 +34,7 @@
 (defun xmap (&optional keymap)
   (run/i `("setxkbmap" "us"))
   (run/i `("xset" "r" "rate" "250"))
-  ;; (run/i `("xmodmap" ,(home (fmt "hejmo/ktp/xmodmap/~A.xmap" keymap))))
+  ;; (run/i `("xmodmap" ,(home (fmt "hejmo/ktp/xmodmap/~a.xmap" keymap))))
   )
 
 (defun device-header (device)
@@ -120,7 +120,7 @@
 
 (def ascii-hex-table ()
   (loop :for i :from 32 :to 255
-        :do (format t "~A~X~A:~A~A~A~:[ ~;~%~]"
+        :do (format t "~a~X~a:~a~a~a~:[ ~;~%~]"
                     *num-mode* i
                     *colon-mode* *char-mode*
                     (char-display-char i)
@@ -129,7 +129,7 @@
 
 (def ascii-oct-table ()
   (loop :for i :from 32 :to 255
-        :do (format t "~A~3O~A~A~A~:[ ~;~%~]"
+        :do (format t "~a~3O~a~a~a~:[ ~;~%~]"
                     *num-mode* i
                     *char-mode*
                     (char-display-char i)
@@ -140,7 +140,7 @@
   (run/i `(tr "[a-zA-Z]" "[n-za-mN-ZA-M]" ,@args)))
 
 (def battery ()
-  (format t "~A" (battery-status))
+  (format t "~a" (battery-status))
   (values))
 
 (def config-x ()

@@ -44,6 +44,6 @@
     (t (if-let (fun (package-function :miera/src/touchpad (standard-case-symbol-name (first argv))))
          (apply #'run-command fun (rest argv))
          (progn
-           (format *error-output* "Bad touchpad command: ~A~%" (first argv))
+           (format *error-output* "Bad touchpad command: ~a~%" (first argv))
            (help *error-output*)
            (uiop:quit 2)))))) 

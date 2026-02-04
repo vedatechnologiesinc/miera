@@ -122,15 +122,15 @@
 (defcommand screenshot (mode)
   "Take a screenshot, of course."
   (let* ((dir (uiop:truenamize +screenshots-dir+))
-         (file (fmt "~A.png" (local-time:format-timestring nil (local-time:now))))
-         (dest (fmt "mv $f ~A" dir))
-         (image (fmt "~A~A" dir file)))
+         (file (fmt "~a.png" (local-time:format-timestring nil (local-time:now))))
+         (dest (fmt "mv $f ~a" dir))
+         (image (fmt "~a~a" dir file)))
     (flet ((scrot (file dest &rest args)
              (run/i `("scrot" ,@args ,file -e ,dest))))
       (match mode
         ((ppcre "(full)") (scrot file dest))
         ((ppcre "(region)") (scrot file dest '-s))
-        (_ (err (fmt "invalid mode ~A~%" mode))))
+        (_ (err (fmt "invalid mode ~a~%" mode))))
       (run `("xclip" "-selection" "clipboard" "-t" "image/png" ,image)))))
 
 (defcommand xmsg (&rest args)
@@ -204,33 +204,38 @@
 
 (defcommand sisku (&rest args)
   "Open la lidysisku in Qutebrowser."
-  (with (str "https://la-lojban.github.io/sutysisku/lojban/index.html#seskari=cnano&sisku=~A&bangu=en&versio=masno")
+  (with (str "https://la-lojban.github.io/sutysisku/lojban/index.html#seskari=cnano&sisku=~a&bangu=en&versio=masno")
     (mapcar #'qb (mapcar (lambda (word) (fmt str word)) args))))
 
 (defcommand vortaro (&rest args)
   "Open Tuja Vortaro in Qutebrowser."
-  (with (str "https://www.tujavortaro.net/index.html?lingvo=en&vorto=~A")
+  (with (str "https://www.tujavortaro.net/index.html?lingvo=en&vorto=~a")
+    (mapcar #'qb (mapcar (lambda (word) (fmt str word)) args))))
+
+(defcommand l1sp (&rest args)
+  "Open the Hyperspec in Qutebrowser."
+  (with (str "http://l1sp.org/search?q=~a")
     (mapcar #'qb (mapcar (lambda (word) (fmt str word)) args))))
 
 (defcommand clhs (&rest args)
   "Open the Hyperspec in Qutebrowser."
-  (with (str "https://www.xach.com/clhs?q=~A")
+  (with (str "https://www.xach.com/clhs?q=~a")
     (mapcar #'qb (mapcar (lambda (word) (fmt str word)) args))))
 
 (defcommand open-dired (directory)
   "Open the current directory in Dired."
-  (with (str "(my-dired-workspace \"~A\")")
+  (with (str "(my-dired-workspace \"~a\")")
     (run/i `("emacsclient" "--eval" ,(fmt str directory)))
     (when (uiop:os-macosx-p)
       (run/i '("open" "-a" "Emacs")))))
 
 (defcommand backlight (host value)
   "Set the backlight level of HOST to VALUE."
-  (run/i `("ssh" ,host ,(fmt "sudo light -S ~A -s sysfs/backlight/intel_backlight" value))))
+  (run/i `("ssh" ,host ,(fmt "sudo light -S ~a -s sysfs/backlight/intel_backlight" value))))
 
 (defcommand dpms (host value)
   "Set the dpms setting of HOST to VALUE."
-  (run/i `("ssh" ,host ,(fmt "DISPLAY=:0.0 xset dpms force ~A" value))))
+  (run/i `("ssh" ,host ,(fmt "DISPLAY=:0.0 xset dpms force ~a" value))))
 
 (defcommand resolution (mode)
   "Set the screen resolution to MODE."

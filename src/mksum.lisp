@@ -26,11 +26,11 @@
 
 (defun format-two (arg-1 arg-2)
   "Print the two arguments in aesthetic form."
-  (fmt "~A ~A" arg-1 arg-2))
+  (fmt "~a ~a" arg-1 arg-2))
 
 (defun print-list (list)
   "Output formatted string from LIST."
-  (format t "~{~A~%~}" list))
+  (format t "~{~a~%~}" list))
 
 (defun print-help ()
   "Print help text."
