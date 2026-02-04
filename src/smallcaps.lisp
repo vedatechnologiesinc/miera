@@ -52,6 +52,6 @@
   (flet ((fn (base)
            (with (value (cdr (assoc base *smallcaps-alist* :test #'char-equal)))
              (or value base))))
-    (loop :for char :across text :do (format t "~A" (fn char)))))
+    (loop :for char :across text :do (format t "~a" (fn char)))))
 
 (register-commands :miera/src/smallcaps)

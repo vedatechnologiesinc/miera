@@ -29,6 +29,6 @@
   (run/i `(pipe (l ,@args) (less))))
 
 (def sush (&rest args)
-  (run/i `(sudo "sh" "-c" ,(fmt "~{~A~^ ~}" args))))
+  (run/i `(sudo "sh" "-c" ,(fmt "~{~a~^ ~}" args))))
 
 (register-commands :miera/src/unix)

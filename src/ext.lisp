@@ -19,6 +19,6 @@
     (success)))
 
 (def help ()
-  (format t "~A commands: ~{~A~^ ~}~%" (get-name) (all-entry-names)))
+  (format t "~a commands: ~{~a~^ ~}~%" (get-name) (all-entry-names)))
 
 (register-commands :miera/src/ext)
