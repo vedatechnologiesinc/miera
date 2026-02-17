@@ -27,7 +27,7 @@
                           (uiop:run-program '("xinput" "list") :output :lines))) "\\1")))
 
 (defun xdev (name type command &rest args)
-  (with (id (xdev-id name type))
+  (with id (xdev-id name type)
     (when (not (string= id "NIL"))
       (run/i `(xinput ,command ,(parse-integer id) ,@args)))))
 
@@ -45,7 +45,7 @@
 
 (defun trim-device-header (device)
   "Return DEVICE without the header."
-  (with (header (device-header device))
+  (with header (device-header device)
     (if header
         (multiple-value-bind (start end)
             (cl-ppcre:scan (cat "^" header ":") device)
@@ -102,15 +102,15 @@
 (defun load-hostname ()
   (with ((hostname (uiop:hostname))
          (xdev-args '("pointer" "set-button-map" "1" "2" "3" "5" "4")))
-    (match hostname
-      ((ppcre "la-vulpo")
-       (miera/src/touchpad:disable)
-       (trackpoint "TPPS/2 IBM TrackPoint")
-       (trackpoint "pointer:Lenovo ThinkPad Compact USB Keyboard with TrackPoint")
-       (apply #'xdev (append '("Logitech USB Receiver") xdev-args)))
-      ((ppcre "la-pando")
-       (apply #'xdev (append '("Xornet gaming mouse") xdev-args)))
-      (_ (success)))))
+      (match hostname
+        ((ppcre "la-vulpo")
+         (miera/src/touchpad:disable)
+         (trackpoint "TPPS/2 IBM TrackPoint")
+         (trackpoint "pointer:Lenovo ThinkPad Compact USB Keyboard with TrackPoint")
+         (apply #'xdev (append '("Logitech USB Receiver") xdev-args)))
+        ((ppcre "la-pando")
+         (apply #'xdev (append '("Xornet gaming mouse") xdev-args)))
+        (_ (success)))))
 
 (defun load-pointer ()
   (run/i `("xsetroot" "-cursor_name" "left_ptr")))
@@ -155,7 +155,7 @@
   (run/i `(pgrep "--list-full" "--list-name" "--full" "--ignore-case" ,@args)))
 
 (def pk (&rest args)
-  (with (numbers (mapcar #'string-first (pgrep-lines (last args))))
+  (with numbers (mapcar #'string-first (pgrep-lines (last args)))
     (loop :for number :in numbers
           :do (run/i `(kill ,@(butlast args) ,number)))))
 

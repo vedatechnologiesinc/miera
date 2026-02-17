@@ -169,62 +169,65 @@
 
 (defcommand gu (&rest args)
   "Run guvcview with the default device."
-  (with (device (miera/src/webcam:webcam "default-device"))
+  (with device (miera/src/webcam:webcam "default-device")
     (run/i `("guvcview" "-d" ,device ,@args))))
 
 (defcommand p (&rest args)
   "Run the media player."
-  (with (cmd (uiop:os-cond ((uiop:os-macosx-p)
-                            "mpv")
-                           (t "mpv")))
+  (with cmd (uiop:os-cond ((uiop:os-macosx-p)
+                           "mpv")
+                          (t "mpv"))
     (if (neg args)
         (run/i `(,cmd "."))       
         (run/i `(,cmd ,@args)))))
 
 (defcommand qb (&rest args)
   "Open Qutebrowser."
-  (with (path (uiop:os-cond ((uiop:os-macosx-p)
-                             "/Applications/qutebrowser.app/Contents/MacOS/qutebrowser")
-                            (t "qutebrowser")))
+  (with path
+      (uiop:os-cond ((uiop:os-macosx-p)
+                     "/Applications/qutebrowser.app/Contents/MacOS/qutebrowser")
+                    (t "qutebrowser"))
     (run/i `(,path ,@args))))
 
 (defcommand sf (&rest args)
   "Open Safari."
-  (with (path (uiop:os-cond ((uiop:os-macosx-p)
-                             "/Applications/Safari.app/Contents/MacOS/Safari")
-                            (t "safari")))
+  (with path
+      (uiop:os-cond ((uiop:os-macosx-p)
+                     "/Applications/Safari.app/Contents/MacOS/Safari")
+                    (t "safari"))
     (run/i `(,path ,@args))))
 
 (defcommand pdf (&rest args)
   "Convert input to PDF using LibreOffice"
-  (with (soffice (uiop:os-cond ((uiop:os-macosx-p)
-                                "/Applications/LibreOffice.app/Contents/MacOS/soffice")
-                               (t "libreoffice")))
+  (with soffice
+      (uiop:os-cond ((uiop:os-macosx-p)
+                     "/Applications/LibreOffice.app/Contents/MacOS/soffice")
+                    (t "libreoffice"))
     (run/i `(,soffice "--headless" "--convert-to" "pdf" "--outdir" "." ,@args))))
 
 (defcommand sisku (&rest args)
   "Open la lidysisku in Qutebrowser."
-  (with (str "https://la-lojban.github.io/sutysisku/lojban/index.html#seskari=cnano&sisku=~a&bangu=en&versio=masno")
+  (with str "https://la-lojban.github.io/sutysisku/lojban/index.html#seskari=cnano&sisku=~a&bangu=en&versio=masno"
     (mapcar #'qb (mapcar (lambda (word) (fmt str word)) args))))
 
 (defcommand vortaro (&rest args)
   "Open Tuja Vortaro in Qutebrowser."
-  (with (str "https://www.tujavortaro.net/index.html?lingvo=en&vorto=~a")
+  (with str "https://www.tujavortaro.net/index.html?lingvo=en&vorto=~a"
     (mapcar #'qb (mapcar (lambda (word) (fmt str word)) args))))
 
 (defcommand l1sp (&rest args)
   "Open the Hyperspec in Qutebrowser."
-  (with (str "http://l1sp.org/search?q=~a")
+  (with str "http://l1sp.org/search?q=~a"
     (mapcar #'qb (mapcar (lambda (word) (fmt str word)) args))))
 
 (defcommand clhs (&rest args)
   "Open the Hyperspec in Qutebrowser."
-  (with (str "https://www.xach.com/clhs?q=~a")
+  (with str "https://www.xach.com/clhs?q=~a"
     (mapcar #'qb (mapcar (lambda (word) (fmt str word)) args))))
 
 (defcommand open-dired (directory)
   "Open the current directory in Dired."
-  (with (str "(my-dired-workspace \"~a\")")
+  (with str "(my-dired-workspace \"~a\")"
     (run/i `("emacsclient" "--eval" ,(fmt str directory)))
     (when (uiop:os-macosx-p)
       (run/i '("open" "-a" "Emacs")))))

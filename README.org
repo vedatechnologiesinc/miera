@@ -1,4 +1,10 @@
 #+TITLE: Miera
+* Table of contents :TOC:
+- [[#overview][Overview]]
+- [[#install-system-dependencies][Install system dependencies]]
+- [[#install-lisp-dependencies][Install lisp dependencies]]
+- [[#install-the-scripts-themselves][Install the scripts themselves]]
+
 * Overview
 Miera is a collection of Lisp CLI scripts designed for various system automation
 and utility tasks. The scripts designed to work on Unix and Unix-like operating
@@ -9,6 +15,7 @@ shell commands using [[https://github.com/fare/inferior-shell][inferior-shell]],
 symlinks, handling application launchers, configuring devices like keyboards and
 touchpads, and interacting with the system environment—such as setting locales,
 configuring backlight, or managing Bluetooth devices.
+
 * Install system dependencies
 Before installing Miera, you need to install the required system dependencies.
 These dependencies vary based on the system that you're using.
@@ -28,6 +35,7 @@ sudo dnf install -y sbcl cl-launch make
 #+begin_src sh
 sudo pacman -S sbcl cl-launch make
 #+end_src
+
 * Install lisp dependencies
 After installing the system dependencies, you'll need to install the necessary
 Lisp dependencies using /Quicklisp/. This can be done as follows:
@@ -40,6 +48,7 @@ mkdir ~/common-lisp
 cd ~/common-lisp
 git clone https://github.com/vedatechnologiesinc/miera
 #+end_src
+
 * Install the scripts themselves
 Once you've installed al the dependencies, you can install the scripts by running:
 #+begin_src sh

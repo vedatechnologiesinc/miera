@@ -26,9 +26,9 @@
       ((ppcre "Device Enabled\\s+[():0-9]+\\s+([01])" x) (return (equal x "1"))))))
 
 (def toggle (&optional (id (get-id)) (on :toggle))
-  (with (state (ecase on
-                 ((:toggle) (not (enabledp id)))
-                 ((nil t) on)))
+  (with state (ecase on
+                ((:toggle) (not (enabledp id)))
+                ((nil t) on))
     (run `(xinput ,(if state 'enable 'disable) ,id))))
 
 (def disable (&optional (id (get-id)))
@@ -42,8 +42,8 @@
     ((null argv) (toggle))
     ((eql (first-char (first argv)) #\() (eval (first argv)))
     (t (if-let (fun (package-function :miera/src/touchpad (standard-case-symbol-name (first argv))))
-         (apply #'run-command fun (rest argv))
-         (progn
-           (format *error-output* "Bad touchpad command: ~a~%" (first argv))
-           (help *error-output*)
-           (uiop:quit 2)))))) 
+               (apply #'run-command fun (rest argv))
+               (progn
+                 (format *error-output* "Bad touchpad command: ~a~%" (first argv))
+                 (help *error-output*)
+                 (uiop:quit 2)))))) 

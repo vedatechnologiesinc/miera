@@ -158,7 +158,7 @@
 
 (def webcam (fn &rest args)
   "Apply matching FN to ARGS."
-  (with (symbol (intern (string-upcase fn) (find-package :miera/src/webcam)))
+  (with symbol (intern (string-upcase fn) (find-package :miera/src/webcam))
     (when (fboundp symbol)
       (apply symbol args))))
 

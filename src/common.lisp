@@ -21,14 +21,14 @@
   "Display battery status."
   (with ((base-dir "/sys/class/power_supply/*")
          (exclude-string "/AC/"))
-    (uiop:with-output (s nil)
-      (loop :for dir :in (remove-if (lambda (path)
-                                      (search exclude-string (uiop:native-namestring path)))
-                                    (uiop:directory* base-dir))
-            :for battery = (first (last (pathname-directory dir)))
-            :for capacity = (uiop:read-file-line (uiop:subpathname dir "capacity"))
-            :for status = (uiop:read-file-line (uiop:subpathname dir "status"))
-            :do (format s "~a: ~a% (~a)~%" battery capacity status)))))
+      (uiop:with-output (s nil)
+        (loop :for dir :in (remove-if (lambda (path)
+                                        (search exclude-string (uiop:native-namestring path)))
+                                      (uiop:directory* base-dir))
+              :for battery = (first (last (pathname-directory dir)))
+              :for capacity = (uiop:read-file-line (uiop:subpathname dir "capacity"))
+              :for status = (uiop:read-file-line (uiop:subpathname dir "status"))
+              :do (format s "~a: ~a% (~a)~%" battery capacity status)))))
 
 (def wine (path &rest args)
   "Run PATH with wine."
@@ -104,7 +104,7 @@
 
 (def run-with-nix-user (profile binary args)
   "Run binary under a separate profile."
-  (with ((bin (home (fmt ".nix/profiles/~a/bin" profile))))
+  (with bin (home (fmt ".nix/profiles/~a/bin" profile))
     (setf (uiop:getenv "PATH") (unix-namestring bin))
     (run/i `(,binary ,@args))))
 
