@@ -5,7 +5,8 @@
   (:use #:cl
         #:cl-scripting
         #:net.didierverna.clon
-        #:marie))
+        #:marie)
+  (:nicknames #:miera/mksum))
 
 (in-package #:miera/src/mksum)
 

@@ -2,7 +2,8 @@
 ;;;; main.lisp --- main entry point
 
 (uiop:define-package #:miera/src/main
-  (:use #:cl))
+  (:use #:cl)
+  (:nicknames #:miera/main))
 
 (in-package #:miera/src/main)
 

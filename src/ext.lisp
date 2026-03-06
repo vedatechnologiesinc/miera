@@ -6,7 +6,8 @@
         #:inferior-shell
         #:cl-scripting
         #:cl-launch/dispatch
-        #:marie))
+        #:marie)
+  (:nicknames #:miera/ext))
 
 (in-package #:miera/src/ext)
 

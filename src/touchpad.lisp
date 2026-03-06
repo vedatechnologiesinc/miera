@@ -8,7 +8,8 @@
         #:optima
         #:optima.ppcre
         #:miera/src/ext
-        #:marie))
+        #:marie)
+  (:nicknames #:miera/touchpad))
 
 (in-package #:miera/src/touchpad)
 

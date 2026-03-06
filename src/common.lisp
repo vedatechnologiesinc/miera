@@ -5,7 +5,8 @@
   (:use #:cl
         #:inferior-shell
         #:cl-scripting
-        #:marie))
+        #:marie)
+  (:nicknames #:miera/common))
 
 (in-package #:miera/src/common)
 

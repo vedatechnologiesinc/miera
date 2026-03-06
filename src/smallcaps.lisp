@@ -8,7 +8,8 @@
         #:optima
         #:optima.ppcre
         #:marie
-        #:miera/src/common))
+        #:miera/src/common)
+  (:nicknames #:miera/smallcaps))
 
 (in-package #:miera/src/smallcaps)
 

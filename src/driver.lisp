@@ -2,8 +2,8 @@
 ;;;; driver.lisp --- symbol driver
 
 (uiop:define-package :miera/src/driver
-  (:nicknames :miera)
   (:use :uiop/common-lisp)
+  (:nicknames :miera)
   (:use-reexport #:miera/src/common
                  #:miera/src/ext
                  #:miera/src/touchpad

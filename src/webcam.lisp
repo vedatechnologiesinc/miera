@@ -6,7 +6,8 @@
         #:inferior-shell
         #:cl-scripting
         #:miera/src/unix
-        #:marie))
+        #:marie)
+  (:nicknames #:miera/webcam))
 
 (in-package #:miera/src/webcam)
 

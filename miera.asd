@@ -12,6 +12,7 @@
                  #:local-time
                  #:ironclad
                  #:inferior-shell
+                 #:marie
                  #:miera/src/common
                  #:miera/src/ext
                  #:miera/src/touchpad
