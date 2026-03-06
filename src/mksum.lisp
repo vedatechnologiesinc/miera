@@ -1,4 +1,4 @@
-;;;; -*- mode: lisp; syntax: common-lisp; base: 10 -*-
+;;;; -*- mode: lisp; syntax: common-lisp; base: 10; coding: utf-8-unix; external-format: (:utf-8 :eol-style :lf); -*-
 ;;;; mksum.lisp --- generate checksum of files and directories
 
 (uiop:define-package #:miera/src/mksum
@@ -133,7 +133,7 @@
   (with ((buffer (make-array 8192 :element-type '(unsigned-byte 8)))
          (digest (make-array (ironclad:digest-length type) :element-type '(unsigned-byte 8)))
          (digester (ironclad:make-digest type)))
-    (ironclad:digest-file digester file :buffer buffer :digest digest)
+      (ironclad:digest-file digester file :buffer buffer :digest digest)
     (format-two (ironclad:byte-array-to-hex-string digest) (uiop:truenamize file))))
 
 (defun list-dir-checksum (type directory)
@@ -148,8 +148,8 @@
   (when (uiop:directory-exists-p directory)
     (with* ((path (uiop:truenamize directory))
             (value (reduce (lambda (string-1 string-2) (concat string-1 string-2))
-                           (list-dir-checksum type path))))
-      (format-two (hash type value) path))))
+                    (list-dir-checksum type path))))
+        (format-two (hash type value) path))))
 
 (defun option-without (arg)
   "Create list of SHA256 checksums of files and directories."

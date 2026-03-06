@@ -1,4 +1,4 @@
-;;;; -*- mode: lisp; syntax: common-lisp; base: 10 -*-
+;;;; -*- mode: lisp; syntax: common-lisp; base: 10; coding: utf-8-unix; external-format: (:utf-8 :eol-style :lf); -*-
 ;;;; smallcaps.lisp --- return smallcaps version of text
 
 (uiop:define-package #:miera/src/smallcaps
@@ -49,9 +49,9 @@
 
 (defcommand smallcaps (&optional (text (uiop:slurp-stream-line *standard-input*)))
   "Output the smallcaps version of TEXT."
-  (flet ((fn (base)
-           (with value (cdr (assoc base *smallcaps-alist* :test #'char-equal))
-             (or value base))))
+  (with fn (base)
+    (with value (cdr (assoc base *smallcaps-alist* :test #'char-equal))
+      (or value base))
     (loop :for char :across text :do (format t "~a" (fn char)))))
 
 (register-commands :miera/src/smallcaps)

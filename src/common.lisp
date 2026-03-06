@@ -1,4 +1,4 @@
-;;;; -*- mode: lisp; syntax: common-lisp; base: 10 -*-
+;;;; -*- mode: lisp; syntax: common-lisp; base: 10; coding: utf-8-unix; external-format: (:utf-8 :eol-style :lf); -*-
 ;;;; common.lisp --- common utilities
 
 (uiop:define-package #:miera/src/common
@@ -48,7 +48,7 @@
 
 (def string-first (string)
   "Return the first string from STRING."
-  (let* ((space (position #\  string :test #'equal)))
+  (with space (position #\  string :test #'equal)
     (subseq string 0 space)))
 
 (def run-with-locale (locale &rest args)
@@ -120,11 +120,11 @@
 
 (def run-with-docker-x (docker-args name &rest program-args)
   "Run command with Docker."
-  (let* ((id (string-trim '(#\space #\newline)
-                          (inferior-shell:run/s
-                           `("docker" "inspect" "--format={{ .Config.Hostname }}" ,name))))
-         (permissions (cat "local:" id)))
-    (run/i `("xhost" ,(cat "+" permissions)))
+  (with* ((id (string-trim '(#\space #\newline)
+               (inferior-shell:run/s
+                `("docker" "inspect" "--format={{ .Config.Hostname }}" ,name))))
+          (permissions (cat "local:" id)))
+      (run/i `("xhost" ,(cat "+" permissions)))
     (run/i `("docker" "run" "--rm" "-e" "DISPLAY" "--name" ,name
              "-v" "/tmp/.X11-unix:/tmp/.X11-unix" "--device=/dev/dri:/dev/dri"
              "--memory" "1024m" "--cpus" ".5"
@@ -135,7 +135,7 @@
   "Define a normal command runner."
   `(progn
      ,@(loop :for arg :in (partition args 2)
-             :collect (destructuring-bind (name command)
+             :collect (with (:d name command)
                           arg
                         `(defcommand ,name (&rest args)
                            (run (append (cl-ppcre:split "\\s+" ,command) args)
@@ -146,7 +146,7 @@
   "Define a runner with the QT_QPA environment set to gtk2."
   `(progn
      ,@(loop :for arg :in (partition args 2)
-             :collect (destructuring-bind (name command)
+             :collect (with (:d name command)
                           arg
                         `(defcommand ,name (&rest args)
                            (setf (uiop:getenv "QT_QPA_PLATFORMTHEME") "gtk2")
@@ -158,7 +158,7 @@
   "Define a runner with the QT_QPA environment set to qt5ct."
   `(progn
      ,@(loop :for arg :in (partition args 2)
-             :collect (destructuring-bind (name command)
+             :collect (with (:d name command)
                           arg
                         `(defcommand ,name (&rest args)
                            (setf (uiop:getenv "QT_QPA_PLATFORMTHEME") "qt5ct")
@@ -170,7 +170,7 @@
   "Define a runner without the QT_QPA environment."
   `(progn
      ,@(loop :for arg :in (partition args 2)
-             :collect (destructuring-bind (name command)
+             :collect (with (:d name command)
                           arg
                         `(defcommand ,name (&rest args)
                            (setf (uiop:getenv "QT_QPA_PLATFORMTHEME") "")
@@ -183,7 +183,7 @@
   "Define a command with wine."
   `(progn
      ,@(loop :for arg :in (partition args 2)
-             :collect (destructuring-bind (name command)
+             :collect (with (:d name command)
                           arg
                         `(defcommand ,name (&rest args)
                            (run-with-wine ,command))))))
@@ -192,7 +192,7 @@
   "Define a wine runner."
   `(progn
      ,@(loop :for arg :in (partition args 2)
-             :collect (destructuring-bind (name command)
+             :collect (with (:d name command)
                           arg
                         `(defcommand ,name (&rest args)
                            (run-with-wine-program-files ,command))))))

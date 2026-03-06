@@ -1,4 +1,4 @@
-;;;; -*- mode: lisp; syntax: common-lisp; base: 10 -*-
+;;;; -*- mode: lisp; syntax: common-lisp; base: 10; coding: utf-8-unix; external-format: (:utf-8 :eol-style :lf); -*-
 ;;;; touchring.lisp --- wacom touchring operations
 
 (uiop:define-package #:miera/src/touchring
@@ -53,8 +53,8 @@
   (with* ((lines (inferior-shell:run/lines `("xsetwacom" "list" "devices")))
           (device (concatenate 'string "type: " (string-upcase type)))
           (line (first (remove-if-not (lambda (line) (search device line :test #'string=))
-                                      lines))))
-    (cl-ppcre:regex-replace "(^.*Pad pad).*"  line "\\1")))
+                        lines))))
+      (cl-ppcre:regex-replace "(^.*Pad pad).*"  line "\\1")))
 
 (defun touchring-pad-name ()
   "Return the pad name of touchring detected."

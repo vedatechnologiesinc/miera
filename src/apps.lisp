@@ -1,4 +1,4 @@
-;;;; -*- mode: lisp; syntax: common-lisp; base: 10 -*-
+;;;; -*- mode: lisp; syntax: common-lisp; base: 10; coding: utf-8-unix; external-format: (:utf-8 :eol-style :lf); -*-
 ;;;; apps.lisp --- application launchers
 
 (uiop:define-package #:miera/src/apps
@@ -121,17 +121,16 @@
 
 (defcommand screenshot (mode)
   "Take a screenshot, of course."
-  (let* ((dir (uiop:truenamize +screenshots-dir+))
-         (file (fmt "~a.png" (local-time:format-timestring nil (local-time:now))))
-         (dest (fmt "mv $f ~a" dir))
-         (image (fmt "~a~a" dir file)))
-    (flet ((scrot (file dest &rest args)
-             (run/i `("scrot" ,@args ,file -e ,dest))))
-      (match mode
-        ((ppcre "(full)") (scrot file dest))
-        ((ppcre "(region)") (scrot file dest '-s))
-        (_ (err (fmt "invalid mode ~a~%" mode))))
-      (run `("xclip" "-selection" "clipboard" "-t" "image/png" ,image)))))
+  (with* ((dir (uiop:truenamize +screenshots-dir+))
+          (file (fmt "~a.png" (local-time:format-timestring nil (local-time:now))))
+          (dest (fmt "mv $f ~a" dir))
+          (image (fmt "~a~a" dir file)))
+      (with fn (file dest &rest args) (run/i `("scrot" ,@args ,file -e ,dest))
+        (match mode
+          ((ppcre "(full)") (fn file dest))
+          ((ppcre "(region)") (fn file dest '-s))
+          (_ (err (fmt "invalid mode ~a~%" mode))))
+        (run `("xclip" "-selection" "clipboard" "-t" "image/png" ,image)))))
 
 (defcommand xmsg (&rest args)
   (run/i `("xmessage"

@@ -1,4 +1,4 @@
-*.fasl
+.DS_Store
 *.FASL
 *.fasl
 *.lisp-temp
@@ -16,6 +16,7 @@
 *.sx32fsl
 *.wx64fsl
 *.wx32fsl
-*~
-/miera
 *.64yfasl
+*.html
+*.pdf
+/miera
